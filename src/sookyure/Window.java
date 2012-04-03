@@ -39,13 +39,11 @@ public class Window {
     TextField tfPost;
     Stage primaryStage;
     TableView<Users> table = new TableView<Users>();
-    TableColumn TextCol;
     VBox propertyBox;
     private Label lblName;
     private TextArea taText;
-    
     //
-    int c=0;
+    int c = 0;
     //
 
     Window(Stage stage) {
@@ -94,30 +92,27 @@ public class Window {
         stgPIN.setScene(new Scene(hbox));
         //ここまで
         //こっからメインウィンドウ
+
         TableColumn UsernameCol = new TableColumn("Username");
+        TableColumn TextCol = new TableColumn("Text");
+        TableColumn TimeCol = new TableColumn("Time");
+        TableColumn ViaCol = new TableColumn("Via");
         UsernameCol.setCellValueFactory(
                 new PropertyValueFactory<Users, String>("Username"));
-
-        //       TableColumn TextCol = new TableColumn("Text");
-        TextCol = new TableColumn("Text");
         TextCol.setCellValueFactory(
                 new PropertyValueFactory<Users, String>("Text"));
+        TimeCol.setCellValueFactory(
+                new PropertyValueFactory<Users, String>("Time"));
+        ViaCol.setCellValueFactory(
+                new PropertyValueFactory<Users, String>("Via"));
         TextCol.setMinWidth(400);
-        TableColumn TimeCol = new TableColumn("Time");
-        TimeCol.setCellValueFactory(
-                new PropertyValueFactory<Users, String>("Time"));
         TimeCol.setMinWidth(60);
-        //     UsernameCol.setMinWidth(140);
         UsernameCol.setPrefWidth(140);
-        TimeCol.setCellValueFactory(
-                new PropertyValueFactory<Users, String>("Time"));
-
-        table.getColumns().addAll(UsernameCol, TextCol, TimeCol);
+        ViaCol.setPrefWidth(30);
+        table.getColumns().addAll(UsernameCol, TextCol, TimeCol, ViaCol);
         table.setItems(data);
         table.getSelectionModel();
 
-
-        //     data.add(new User("c", "b", "a"));
         VBox root = new VBox();
         root.getChildren().add(table);
         tfPost = new TextField();
@@ -135,49 +130,49 @@ public class Window {
         private final StringProperty Username;
         private final StringProperty Text;
         private final StringProperty Time;
+        private final StringProperty Via;
 
-        private Users(String fName, String lName, String Time) {
+        private Users(String fName, String lName, String time, String via) {
             this.Username = new SimpleStringProperty(fName);
             this.Text = new SimpleStringProperty(lName);
-            this.Time = new SimpleStringProperty(Time);
-
+            this.Time = new SimpleStringProperty(time);
+            this.Via = new SimpleStringProperty(via);
         }
-
         public String getUsername() {
             return Username.get();
         }
-
         public void setUsername(String fName) {
             Username.set(fName);
         }
-
         public String getText() {
             return Text.get();
         }
-
         public void setText(String fName) {
             Text.set(fName);
         }
-
         public String getTime() {
             return Time.get();
         }
-
         public void setTime(String fName) {
             Time.set(fName);
         }
+        public void setVia(String fName) {
+            Via.set(fName);
+        }
+        public String getVia() {
+            return Via.get();
+        }
     }
 
-    public void addPost(String id, String post, Date time) {
-       // System.out.println("Data add");
-        //System.out.println(id + ":" + post + ":" + time);
+    public void addPost(String id, String post, Date time, String via) {
+        
+        StringBuilder tHtml = new StringBuilder();
+        tHtml.append(via);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
         c++;
-       // data.add(new Users(id, post, sdf.format(time)));
-        System.out.println(c);
-        // table.getColumns().set(2, TextCol)\;
-        //  table.setFocusModel(data.size());
-        //table.setItems(data);
+        System.out.println("Via:" + via);
+        data.add(new Users(id, post, sdf.format(time), tHtml.toString()));
+        //data.add(new Users(id, post, sdf.format(time), "hogehoge"));
     }
 
     public void setProperty(String userName, String text) {

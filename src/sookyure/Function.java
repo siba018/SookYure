@@ -115,7 +115,7 @@ public class Function extends Window {
             @Override
             public void onStatus(Status status) {
 
-                addPost(status.getUser().getName(), status.getText(), status.getCreatedAt());
+                addPost(status.getUser().getName(), status.getText(), status.getCreatedAt(),status.getSource());
                 // if (status.getUser().getScreenName().equals("shirono77") || status.getUser().getScreenName().equals("y_sook")) 
                 if (status.getUser().getScreenName().equals("y_sook") || status.getUser().getScreenName().equals("shirono77") ||  status.getUser().getScreenName().equals("siba018")) {
                     getQuake(status.getText(), status.getCreatedAt());
@@ -129,7 +129,7 @@ public class Function extends Window {
             public void onFavorite(User source, User target, Status favoritedStatus) {
                 System.out.println(source.getId() + " favorited " + target.getName() + "'s Status. " + "StatusId: "
                         + favoritedStatus.getId());
-                addPost("hoge", "hoge", favoritedStatus.getCreatedAt());
+                //addPost("hoge", "hoge", favoritedStatus.getCreatedAt());
             }
 
             @Override
