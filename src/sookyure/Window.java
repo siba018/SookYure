@@ -112,8 +112,23 @@ public class Window {
         table.getColumns().addAll(UsernameCol, TextCol, TimeCol, ViaCol);
         table.setItems(data);
         table.getSelectionModel();
+        //menubar
+        Menu menu1 = new Menu("hoge");
+        Menu menu2 = new Menu("piyo");
+        MenuItem menuItem = new MenuItem("open");
+        menuItem.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println("Opening Database Connection...");
+            }
+        });
+        menu1.getItems().add(menuItem);
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(menu1, menu2);
+        //Boxに登録
         VBox root = new VBox();
+        root.getChildren().add(menuBar);
         root.getChildren().add(table);
         tfPost = new TextField();
         propertyBox.getChildren().add(lblName);
@@ -121,7 +136,18 @@ public class Window {
         root.getChildren().add(propertyBox);
         root.getChildren().add(tfPost);
         primaryStage.setScene(new Scene(root, 800, 600));
+        //逆クリックの時のアレ
+        table.setOnMousePressed(new EventHandler<MouseEvent>() {
 
+            @Override
+            public void handle(MouseEvent e) {
+
+                if (e.isSecondaryButtonDown()) {
+                    System.out.println("mouse");
+                }
+
+            }
+        });
         primaryStage.show();
     }
 
@@ -138,34 +164,42 @@ public class Window {
             this.Time = new SimpleStringProperty(time);
             this.Via = new SimpleStringProperty(via);
         }
+
         public String getUsername() {
             return Username.get();
         }
+
         public void setUsername(String fName) {
             Username.set(fName);
         }
+
         public String getText() {
             return Text.get();
         }
+
         public void setText(String fName) {
             Text.set(fName);
         }
+
         public String getTime() {
             return Time.get();
         }
+
         public void setTime(String fName) {
             Time.set(fName);
         }
+
         public void setVia(String fName) {
             Via.set(fName);
         }
+
         public String getVia() {
             return Via.get();
         }
     }
 
     public void addPost(String id, String post, Date time, String via) {
-        
+
         StringBuilder tHtml = new StringBuilder();
         tHtml.append(via);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
