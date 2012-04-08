@@ -56,9 +56,6 @@ public class Window {
 
     Window() {
     }
-    /*
-     * テーブルについてOperaのタブにあることをやる。以上 detaが何者か、Statusオブジェが何者かわかれば勝てると思う
-     */
     ObservableList<Users> data =
             FXCollections.observableArrayList();
     AudioClip ac;
@@ -147,8 +144,16 @@ public class Window {
                 System.out.println("Showing...");
             }
         });
-        MenuItem it = new MenuItem("hoge");
-        cm.getItems().add(it);
+        MenuItem rp = new MenuItem("reply");
+        rp.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent t) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+            
+        });
+        cm.getItems().add(rp);
         table.setContextMenu(cm);
         primaryStage.show();
     }
