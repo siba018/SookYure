@@ -7,6 +7,8 @@ package sookyure;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +26,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
+import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
@@ -40,8 +45,10 @@ public class Window {
     TextField tfPIN;
     TextField tfPost;
     Stage primaryStage;
-    TableView<Users> table = new TableView<Users>();
+    TableView<Users> table = new TableView<>();
     VBox propertyBox;
+    WebView browser;
+    WebEngine we;
     private Label lblName;
     private TextArea taText;
     //
@@ -122,19 +129,11 @@ public class Window {
                 System.out.println("Opening Database Connection...");
             }
         });
+        //上のメニューバー
         menu1.getItems().add(menuItem);
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(menu1, menu2);
-        //Boxに登録
-        VBox root = new VBox();
-        root.getChildren().add(menuBar);
-        root.getChildren().add(table);
-        tfPost = new TextField();
-        propertyBox.getChildren().add(lblName);
-        propertyBox.getChildren().add(taText);
-        root.getChildren().add(propertyBox);
-        root.getChildren().add(tfPost);
-        primaryStage.setScene(new Scene(root, 800, 600));
+
         //逆クリックの時のアレ
         ContextMenu cm = new ContextMenu();
         cm.setOnShowing(new EventHandler<WindowEvent>() {
@@ -145,16 +144,34 @@ public class Window {
             }
         });
         MenuItem rp = new MenuItem("reply");
-        rp.setOnAction(new EventHandler<ActionEvent>(){
+        rp.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent t) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
-            
         });
         cm.getItems().add(rp);
         table.setContextMenu(cm);
+        //謎のHTMLEditorを使ってみよう！（白目）
+        browser = new WebView();
+        browser.setPrefHeight(100);
+        we = browser.getEngine();
+        
+        //Boxに登録
+        VBox root = new VBox();
+        root.getChildren().add(menuBar);
+        root.getChildren().add(table);
+        tfPost = new TextField();
+        propertyBox.getChildren().add(lblName);
+        //propertyBox.getChildren().add(taText);
+        propertyBox.getChildren().add(browser);
+        root.getChildren().add(propertyBox);
+        //  root.getChildren().add(browesr);
+        root.getChildren().add(tfPost);
+
+        primaryStage.setScene(new Scene(root, 800, 600));
+
         primaryStage.show();
     }
 
@@ -213,11 +230,29 @@ public class Window {
         c++;
         System.out.println("Via:" + via);
         data.add(new Users(id, post, sdf.format(time), tHtml.toString()));
-        //data.add(new Users(id, post, sdf.format(time), "hogehoge"));
     }
 
     public void setProperty(String userName, String text) {
         lblName.setText(table.getSelectionModel().getSelectedItem().getUsername());
-        taText.setText(table.getSelectionModel().getSelectedItem().getText());
+        //taText.setText(table.getSelectionModel().getSelectedItem().getText());
+        we.loadContent(convURLLink(table.getSelectionModel().getSelectedItem().getText()));
+    }
+    
+    /**
+     * URLを抽出するための正規表現パターン
+     */
+    public static final Pattern convURLLinkPtn =
+            Pattern.compile("(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+",
+            Pattern.CASE_INSENSITIVE);
+
+    /**
+     * 指定された文字列内のURLを、正規表現を使用し、 リンク（a href=...）に変換する。
+     *
+     * @param str 指定の文字列。
+     * @return リンクに変換された文字列。
+     */
+    public static String convURLLink(String str) {
+        Matcher matcher = convURLLinkPtn.matcher(str);
+        return matcher.replaceAll("<a href=\"$0\">$0</a>");
     }
 }

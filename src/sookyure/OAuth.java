@@ -35,7 +35,7 @@ public class OAuth {
 
         if (loaderAccessToken[0] == null) {
             //アクセストークンがなかったら
-          //  showPINWindow();
+            //  showPINWindow();
             conf = null;
         } else {
             //アクセストークンが既に登録されてたら
@@ -65,7 +65,7 @@ public class OAuth {
         accessToken = null;
 
         System.out.print("PINcode:");
-  //      stgPIN.show();
+        //      stgPIN.show();
         //PIN konohen
 
 
@@ -145,10 +145,7 @@ public class OAuth {
 
         try {
             desktop.browse(new URI(URL));
-        } catch (URISyntaxException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (URISyntaxException | IOException ex) {
         }
     }
 
