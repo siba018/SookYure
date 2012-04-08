@@ -25,7 +25,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -137,17 +139,17 @@ public class Window {
         root.getChildren().add(tfPost);
         primaryStage.setScene(new Scene(root, 800, 600));
         //逆クリックの時のアレ
-        table.setOnMousePressed(new EventHandler<MouseEvent>() {
+        ContextMenu cm = new ContextMenu();
+        cm.setOnShowing(new EventHandler<WindowEvent>() {
 
             @Override
-            public void handle(MouseEvent e) {
-
-                if (e.isSecondaryButtonDown()) {
-                    System.out.println("mouse");
-                }
-
+            public void handle(WindowEvent t) {
+                System.out.println("Showing...");
             }
         });
+        MenuItem it = new MenuItem("hoge");
+        cm.getItems().add(it);
+        table.setContextMenu(cm);
         primaryStage.show();
     }
 
