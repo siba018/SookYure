@@ -18,19 +18,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
-import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -51,6 +45,7 @@ public class Window {
     WebEngine we;
     private Label lblName;
     private TextArea taText;
+    MenuItem rp;
     //
     int c = 0;
     //
@@ -103,6 +98,7 @@ public class Window {
         TableColumn TextCol = new TableColumn("Text");
         TableColumn TimeCol = new TableColumn("Time");
         TableColumn ViaCol = new TableColumn("Via");
+        TableColumn IdCol = new TableColumn("ID");
         UsernameCol.setCellValueFactory(
                 new PropertyValueFactory<Users, String>("Username"));
         TextCol.setCellValueFactory(
@@ -111,14 +107,16 @@ public class Window {
                 new PropertyValueFactory<Users, String>("Time"));
         ViaCol.setCellValueFactory(
                 new PropertyValueFactory<Users, String>("Via"));
+        IdCol.setCellValueFactory(
+                new PropertyValueFactory<Users, String>("Id"));
         TextCol.setMinWidth(400);
         TimeCol.setMinWidth(60);
         UsernameCol.setPrefWidth(140);
         ViaCol.setPrefWidth(30);
-        table.getColumns().addAll(UsernameCol, TextCol, TimeCol, ViaCol);
+        table.getColumns().addAll(UsernameCol, TextCol, TimeCol, ViaCol,IdCol);
         table.setItems(data);
         table.getSelectionModel();
-        //menubar
+        //上のメニューバー
         Menu menu1 = new Menu("hoge");
         Menu menu2 = new Menu("piyo");
         MenuItem menuItem = new MenuItem("open");
@@ -129,13 +127,14 @@ public class Window {
                 System.out.println("Opening Database Connection...");
             }
         });
-        //上のメニューバー
+
         menu1.getItems().add(menuItem);
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(menu1, menu2);
 
         //逆クリックの時のアレ
         ContextMenu cm = new ContextMenu();
+
         cm.setOnShowing(new EventHandler<WindowEvent>() {
 
             @Override
@@ -143,21 +142,17 @@ public class Window {
                 System.out.println("Showing...");
             }
         });
-        MenuItem rp = new MenuItem("reply");
-        rp.setOnAction(new EventHandler<ActionEvent>() {
+        rp = new MenuItem("reply");
+        //ハンドラーは別に移動しました
 
-            @Override
-            public void handle(ActionEvent t) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
         cm.getItems().add(rp);
         table.setContextMenu(cm);
         //謎のHTMLEditorを使ってみよう！（白目）
         browser = new WebView();
         browser.setPrefHeight(100);
         we = browser.getEngine();
-        
+
+
         //Boxに登録
         VBox root = new VBox();
         root.getChildren().add(menuBar);
@@ -181,12 +176,14 @@ public class Window {
         private final StringProperty Text;
         private final StringProperty Time;
         private final StringProperty Via;
+        private final StringProperty Id;
 
-        private Users(String fName, String lName, String time, String via) {
+        private Users(String fName, String lName, String time, String via, String Id) {
             this.Username = new SimpleStringProperty(fName);
             this.Text = new SimpleStringProperty(lName);
             this.Time = new SimpleStringProperty(time);
             this.Via = new SimpleStringProperty(via);
+            this.Id = new SimpleStringProperty(Id);
         }
 
         public String getUsername() {
@@ -220,16 +217,24 @@ public class Window {
         public String getVia() {
             return Via.get();
         }
+
+        public String getId() {
+            return Id.get();
+        }
+
+        public void setId(String fName) {
+            Id.set(fName);
+        }
     }
 
-    public void addPost(String id, String post, Date time, String via) {
+    public void addPost(String id, String post, Date time, String via,String Id) {
 
         StringBuilder tHtml = new StringBuilder();
         tHtml.append(via);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
         c++;
         System.out.println("Via:" + via);
-        data.add(new Users(id, post, sdf.format(time), tHtml.toString()));
+        data.add(new Users(id, post, sdf.format(time), tHtml.toString(),Id));
     }
 
     public void setProperty(String userName, String text) {
@@ -237,7 +242,6 @@ public class Window {
         //taText.setText(table.getSelectionModel().getSelectedItem().getText());
         we.loadContent(convURLLink(table.getSelectionModel().getSelectedItem().getText()));
     }
-    
     /**
      * URLを抽出するための正規表現パターン
      */

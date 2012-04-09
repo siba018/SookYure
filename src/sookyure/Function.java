@@ -68,8 +68,15 @@ public class Function extends Window {
                 }
             }
         });
+        rp.setOnAction(new EventHandler<ActionEvent>() {
 
-
+            @Override
+            public void handle(ActionEvent t) {
+            
+             tfPost.setText("@" + table.getSelectionModel().getSelectedItem().getId() + " ") ;
+   
+            }
+        });
     }
 
     public void setTwitter() {
@@ -84,8 +91,8 @@ public class Function extends Window {
     // 3. UserStream 受信時に応答する（UserStreamListener）リスナーを実装する
 
     public void getQuake(String sook, Date time) {
-      //  System.out.println("oreore");
-     //   System.out.println(sook.indexOf("ゆれ"));
+        //  System.out.println("oreore");
+        //   System.out.println(sook.indexOf("ゆれ"));
         System.out.println(sook);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         if ((sook.indexOf("ゆれ") >= 0) || (sook.indexOf("揺れ") >= 0) || (sook.indexOf("ユレ") >= 0)) {
@@ -115,9 +122,9 @@ public class Function extends Window {
             @Override
             public void onStatus(Status status) {
 
-                addPost(status.getUser().getName(), status.getText(), status.getCreatedAt(),status.getSource());
+                addPost(status.getUser().getName(), status.getText(), status.getCreatedAt(), status.getSource(),status.getUser().getScreenName());
                 // if (status.getUser().getScreenName().equals("shirono77") || status.getUser().getScreenName().equals("y_sook")) 
-                if (status.getUser().getScreenName().equals("y_sook") || status.getUser().getScreenName().equals("shirono77") ||  status.getUser().getScreenName().equals("siba018")) {
+                if (status.getUser().getScreenName().equals("y_sook") || status.getUser().getScreenName().equals("shirono77")) {
                     getQuake(status.getText(), status.getCreatedAt());
                 }
                 System.out.println(status.getUser().getScreenName());
