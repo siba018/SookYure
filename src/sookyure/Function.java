@@ -42,13 +42,12 @@ public class Function extends Window {
         });
 
         tfPost.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent event) {
                 if (replyto == 0) {
                     oAuth.updateStatus(tfPost.getText());
                 } else {
-                    System.out.println("hogeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + replyto);
+                    System.out.println("reply : " + replyto);
                     oAuth.updateStatus(tfPost.getText(), replyto);
                 }
                 tfPost.setText("");
@@ -75,6 +74,7 @@ public class Function extends Window {
                 }
             }
         });
+        //replyボタンのハンドラ
         rp.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -82,6 +82,8 @@ public class Function extends Window {
 
                 tfPost.setText("@" + table.getSelectionModel().getSelectedItem().getId() + " ");
                 replyto = table.getSelectionModel().getSelectedItem().getStatusId();
+                System.out.println("in_reply_to : " + replyto);
+                
             }
         });
     }
@@ -128,7 +130,7 @@ public class Function extends Window {
             public void onStatus(Status status) {
 
                 addPost(status.getUser().getName(), status.getText(), status.getCreatedAt(),
-                        status.getSource(), status.getUser().getScreenName(), status.getUser().getId());
+                        status.getSource(), status.getUser().getScreenName(), status.getId());
                 // if (status.getUser().getScreenName().equals("shirono77") || status.getUser().getScreenName().equals("y_sook")) 
                 if (status.getUser().getScreenName().equals("y_sook") || status.getUser().getScreenName().equals("shirono77")) {
                     getQuake(status.getText(), status.getCreatedAt());

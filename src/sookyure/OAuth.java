@@ -160,7 +160,9 @@ public class OAuth {
             System.out.println("post失敗");
         }
     }
-    public void updateStatus(String post,Long in_reply_to){
+
+    public void updateStatus(String post, Long in_reply_to) {
+        System.out.println("post : " + post + "\nin_reply_to : " + in_reply_to);
         StatusUpdate statusUpdate = new StatusUpdate(post);
         statusUpdate.setInReplyToStatusId(in_reply_to);
         try {

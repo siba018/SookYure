@@ -162,7 +162,6 @@ public class Window {
         //propertyBox.getChildren().add(taText);
         propertyBox.getChildren().add(browser);
         root.getChildren().add(propertyBox);
-        //  root.getChildren().add(browesr);
         root.getChildren().add(tfPost);
 
         primaryStage.setScene(new Scene(root, 800, 600));
@@ -243,7 +242,6 @@ public class Window {
         tHtml.append(via);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
         c++;
-        System.out.println("Via:" + via);
         data.add(new Users(id, post, sdf.format(time), tHtml.toString(), Id, StatusId));
     }
 
