@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -155,7 +158,15 @@ public class OAuth {
         } catch (TwitterException e) {
             // TODO 自動生成された catch ブロック
             System.out.println("post失敗");
-            e.printStackTrace();
+        }
+    }
+    public void updateStatus(String post,Long in_reply_to){
+        StatusUpdate statusUpdate = new StatusUpdate(post);
+        statusUpdate.setInReplyToStatusId(in_reply_to);
+        try {
+            twitter.updateStatus(statusUpdate);
+        } catch (TwitterException ex) {
+            Logger.getLogger(OAuth.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

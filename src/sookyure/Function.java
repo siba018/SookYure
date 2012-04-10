@@ -23,6 +23,7 @@ public class Function extends Window {
     Configuration conf;
     OAuth oAuth;
     TwitterStream twitterStream;
+    long replyto = 0;
 
     Function(Stage stage) {
         super(stage);
@@ -44,8 +45,14 @@ public class Function extends Window {
 
             @Override
             public void handle(ActionEvent event) {
-                oAuth.updateStatus(tfPost.getText());
+                if (replyto == 0) {
+                    oAuth.updateStatus(tfPost.getText());
+                } else {
+                    System.out.println("hogeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + replyto);
+                    oAuth.updateStatus(tfPost.getText(), replyto);
+                }
                 tfPost.setText("");
+                replyto = 0;
             }
         });
         table.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -53,6 +60,7 @@ public class Function extends Window {
             @Override
             public void handle(MouseEvent event) {
                 setProperty(table.getSelectionModel().getSelectedItem().getUsername(), table.getSelectionModel().getSelectedItem().getText());
+                // System.out.println("hoge" +  table.getSelectionModel().getSelectedItem().getStatusId());
             }
         });
         table.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -63,7 +71,6 @@ public class Function extends Window {
                     System.out.println(table.getSelectionModel().getSelectedIndex());
                     int index = table.getSelectionModel().getSelectedIndex();
                     //   table.getFocusModel().focus(index);
-
                     setProperty(table.getSelectionModel().getSelectedItem().getUsername(), table.getSelectionModel().getSelectedItem().getText());
                 }
             }
@@ -72,9 +79,9 @@ public class Function extends Window {
 
             @Override
             public void handle(ActionEvent t) {
-            
-             tfPost.setText("@" + table.getSelectionModel().getSelectedItem().getId() + " ") ;
-   
+
+                tfPost.setText("@" + table.getSelectionModel().getSelectedItem().getId() + " ");
+                replyto = table.getSelectionModel().getSelectedItem().getStatusId();
             }
         });
     }
@@ -91,8 +98,6 @@ public class Function extends Window {
     // 3. UserStream 受信時に応答する（UserStreamListener）リスナーを実装する
 
     public void getQuake(String sook, Date time) {
-        //  System.out.println("oreore");
-        //   System.out.println(sook.indexOf("ゆれ"));
         System.out.println(sook);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         if ((sook.indexOf("ゆれ") >= 0) || (sook.indexOf("揺れ") >= 0) || (sook.indexOf("ユレ") >= 0)) {
@@ -122,7 +127,8 @@ public class Function extends Window {
             @Override
             public void onStatus(Status status) {
 
-                addPost(status.getUser().getName(), status.getText(), status.getCreatedAt(), status.getSource(),status.getUser().getScreenName());
+                addPost(status.getUser().getName(), status.getText(), status.getCreatedAt(),
+                        status.getSource(), status.getUser().getScreenName(), status.getUser().getId());
                 // if (status.getUser().getScreenName().equals("shirono77") || status.getUser().getScreenName().equals("y_sook")) 
                 if (status.getUser().getScreenName().equals("y_sook") || status.getUser().getScreenName().equals("shirono77")) {
                     getQuake(status.getText(), status.getCreatedAt());

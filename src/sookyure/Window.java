@@ -113,7 +113,7 @@ public class Window {
         TimeCol.setMinWidth(60);
         UsernameCol.setPrefWidth(140);
         ViaCol.setPrefWidth(30);
-        table.getColumns().addAll(UsernameCol, TextCol, TimeCol, ViaCol,IdCol);
+        table.getColumns().addAll(UsernameCol, TextCol, TimeCol, ViaCol, IdCol);
         table.setItems(data);
         table.getSelectionModel();
         //上のメニューバー
@@ -177,13 +177,15 @@ public class Window {
         private final StringProperty Time;
         private final StringProperty Via;
         private final StringProperty Id;
+        private long StatusId;
 
-        private Users(String fName, String lName, String time, String via, String Id) {
+        private Users(String fName, String lName, String time, String via, String Id, Long StatusId) {
             this.Username = new SimpleStringProperty(fName);
             this.Text = new SimpleStringProperty(lName);
             this.Time = new SimpleStringProperty(time);
             this.Via = new SimpleStringProperty(via);
             this.Id = new SimpleStringProperty(Id);
+            this.StatusId = StatusId;
         }
 
         public String getUsername() {
@@ -225,16 +227,24 @@ public class Window {
         public void setId(String fName) {
             Id.set(fName);
         }
+
+        public long getStatusId() {
+            return StatusId;
+        }
+
+        public void setStatusId(long fName) {
+            this.StatusId = fName;
+        }
     }
 
-    public void addPost(String id, String post, Date time, String via,String Id) {
+    public void addPost(String id, String post, Date time, String via, String Id,Long StatusId) {
 
         StringBuilder tHtml = new StringBuilder();
         tHtml.append(via);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
         c++;
         System.out.println("Via:" + via);
-        data.add(new Users(id, post, sdf.format(time), tHtml.toString(),Id));
+        data.add(new Users(id, post, sdf.format(time), tHtml.toString(), Id, StatusId));
     }
 
     public void setProperty(String userName, String text) {
