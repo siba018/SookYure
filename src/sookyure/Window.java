@@ -46,6 +46,9 @@ public class Window {
     private Label lblName;
     private TextArea taText;
     MenuItem rp;
+    MenuItem rt;
+    MenuItem fv;
+    MenuItem fk; //ふぁぼ公
     //
     int c = 0;
     //
@@ -134,7 +137,6 @@ public class Window {
 
         //逆クリックの時のアレ
         ContextMenu cm = new ContextMenu();
-
         cm.setOnShowing(new EventHandler<WindowEvent>() {
 
             @Override
@@ -142,10 +144,15 @@ public class Window {
                 System.out.println("Showing...");
             }
         });
-        rp = new MenuItem("reply");
+        rp = new MenuItem("Reply");
+        rt = new MenuItem("Retweet");
+        fv = new MenuItem("Favorite");
+        fk = new MenuItem("ふぁぼ公");
         //ハンドラーは別に移動しました
-
         cm.getItems().add(rp);
+        cm.getItems().add(rt);
+        cm.getItems().add(fv);
+        cm.getItems().add(fk);
         table.setContextMenu(cm);
         //謎のHTMLEditorを使ってみよう！（白目）
         browser = new WebView();
@@ -247,7 +254,6 @@ public class Window {
 
     public void setProperty(String userName, String text) {
         lblName.setText(table.getSelectionModel().getSelectedItem().getUsername());
-        //taText.setText(table.getSelectionModel().getSelectedItem().getText());
         we.loadContent(convURLLink(table.getSelectionModel().getSelectedItem().getText()));
     }
     /**

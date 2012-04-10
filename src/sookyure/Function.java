@@ -42,6 +42,7 @@ public class Function extends Window {
         });
 
         tfPost.setOnAction(new EventHandler<ActionEvent>() {
+
             @Override
             public void handle(ActionEvent event) {
                 if (replyto == 0) {
@@ -74,7 +75,7 @@ public class Function extends Window {
                 }
             }
         });
-        //replyボタンのハンドラ
+        //replyメニューのハンドラ
         rp.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -83,7 +84,38 @@ public class Function extends Window {
                 tfPost.setText("@" + table.getSelectionModel().getSelectedItem().getId() + " ");
                 replyto = table.getSelectionModel().getSelectedItem().getStatusId();
                 System.out.println("in_reply_to : " + replyto);
-                
+
+            }
+        });
+        //Reteetメニューのハンドラ
+        fv.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                replyto = table.getSelectionModel().getSelectedItem().getStatusId();
+                System.out.println("in_reply_to : " + replyto);
+                oAuth.updateFavorite(replyto);
+            }
+        });
+        //Favorite+公式メニューのハンドラ
+        fk.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                replyto = table.getSelectionModel().getSelectedItem().getStatusId();
+                System.out.println("in_reply_to : " + replyto);
+                oAuth.updateReteet(replyto);
+                oAuth.updateFavorite(replyto);
+            }
+        });
+        //Favoriteメニューのハンドラ
+        rt.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                replyto = table.getSelectionModel().getSelectedItem().getStatusId();
+                System.out.println("in_reply_to : " + replyto);
+                oAuth.updateReteet(replyto);
             }
         });
     }
@@ -137,9 +169,10 @@ public class Function extends Window {
                 }
                 System.out.println(status.getUser().getScreenName());
                 System.out.println("status update");
-
             }
-
+            public void onRetweet(){
+                
+            }
             @Override
             public void onFavorite(User source, User target, Status favoritedStatus) {
                 System.out.println(source.getId() + " favorited " + target.getName() + "'s Status. " + "StatusId: "

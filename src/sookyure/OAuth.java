@@ -171,4 +171,18 @@ public class OAuth {
             Logger.getLogger(OAuth.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public void updateReteet(Long statusID){
+        try {
+            twitter.retweetStatus(statusID);
+        } catch (TwitterException ex) {
+            Logger.getLogger(OAuth.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void updateFavorite(Long statusID){
+        try {
+            twitter.createFavorite(statusID);
+        } catch (TwitterException ex) {
+            Logger.getLogger(OAuth.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
